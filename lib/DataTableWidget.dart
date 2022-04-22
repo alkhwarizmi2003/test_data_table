@@ -36,39 +36,112 @@ class _DataTableWidgetState extends State<DataTableWidget> {
       scrollDirection: Axis.horizontal,
       child: Container(
         height: 200,
-        width: 700,
         decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 3)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               flex: 0,
-              child: Container(
-                width: 500,
-                // decoration: BoxDecoration(color: Colors.lightBlue),
-                child: DataTable(
-                  headingRowColor: MaterialStateColor.resolveWith(
-                    (states) {
-                      return Colors.lightGreenAccent;
-                    },
-                  ),
-                  // decoration: BoxDecoration(color: Colors.purpleAccent),
-                  columns: widget.columns.map((e) => DataColumn(label: Text(e))).toList(),
-                  rows: [],
+              child: DataTable(columnSpacing: 0,
+                headingRowColor: MaterialStateColor.resolveWith(
+                  (states) {
+                    return Colors.lightGreenAccent;
+                  },
                 ),
+                // decoration: BoxDecoration(color: Colors.purpleAccent),
+                columns: widget.columns.map((e) => DataColumn(label: Text(e))).toList(),
+                rows: [
+                  DataRow(cells: [
+                    DataCell(
+                      Container(
+                        width: 20,
+child: Text('ert'),
+                      ),
+                    ),
+                    DataCell(
+                      Container(
+                        width: 20,
+                        child: Text('ert'),
+                      ),
+                    ),
+                    DataCell(
+                      Container(
+                        width: 100,
+                        child: Text('ert'),
+                      ),
+                    ),
+                    DataCell(
+                      Container(
+                        width: 100,
+                        child: Text('ert'),
+                      ),
+                    ),
+                    DataCell(
+                      Container(
+                        width: 100,
+                        child: Text('ert'),
+                      ),
+                    ),
+                    DataCell(
+                      Container(
+                        width: 100,
+                        child: Text('ert'),
+                      ),
+                    ),
+                    DataCell(
+                      Container(
+                        width: 100,
+                        child: Text('ert'),
+                      ),
+                    ),
+                    DataCell(
+                      Container(
+                        width: 100,
+                        child: Text('ert'),
+                      ),
+                    ),
+                    DataCell(
+                      Container(
+                        width: 100,
+                        child: Text('ert'),
+                      ),
+                    ),
+                    DataCell(
+                      Container(
+                        width: 100,
+                        child: Text('ert'),
+                      ),
+                    ),
+                    DataCell(
+                      Container(
+                        width: 100,
+                        child: Text('ert'),
+                      ),
+                    ),
+                    DataCell(
+                      Container(
+                        width: 100,
+                        child: Text('ert'),
+                      ),
+                    ),
+                  ]),
+                ],
               ),
             ),
             Expanded(
               flex: 1,
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: DataTable(
-                  headingRowHeight: 0,
+                child: DataTable(columnSpacing: 0,
+                  headingRowHeight: 40,
                   columns: widget.columns.map((e) => DataColumn(label: Text(e))).toList(),
                   rows: widget.data
                       .map(
                         (m) => DataRow(
-                            cells: m.entries.toList().map((map) => DataCell(Text(map.value.toString()))).toList()),
+                            cells: m.entries
+                                .toList()
+                                .map((map) => DataCell(Container(width: 100, child: Text(map.value.toString()))))
+                                .toList()),
                       )
                       .toList(),
                 ),
