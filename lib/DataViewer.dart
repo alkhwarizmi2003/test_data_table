@@ -13,7 +13,7 @@ class DataViewerPage extends StatefulWidget {
 
 class _DataViewerPageState extends State<DataViewerPage> {
   SampleData sd = SampleData();
-  late List<ColumnInfo> colInfos;
+  List<ColumnInfo> colInfos=[];
 
   @override
   void initState() {
@@ -25,19 +25,18 @@ class _DataViewerPageState extends State<DataViewerPage> {
     sd.getTransData();
 
      colInfos = [
-      ColumnInfo('ID', 'trans_id', 20, int),
-       ColumnInfo('Hall Id', 'hall_id', 20, int),
-       ColumnInfo('Owner Id', 'owner_id', 20, int),
-       ColumnInfo('User Id', 'user_id', 20, int),
-       ColumnInfo('Rcpt #', 'receipt_no', 20, int),
-       ColumnInfo('Book Dt', 'book_date', 20, int),
-       ColumnInfo('Func Dt', 'function_date', 20, int),
-       ColumnInfo('Func Name', 'function_name', 20, int),
-       ColumnInfo('Shift', 'trans_id', 20, int),
-       ColumnInfo('Party Name', 'trans_id', 20, int),
-       ColumnInfo('Address', 'trans_id', 20, int),
-       ColumnInfo('Contact', 'trans_id', 20, int),
-
+      ColumnInfo('ID', 'trans_id', 20),
+       ColumnInfo('Hall Id', 'hall_id', 20),
+       ColumnInfo('Owner Id', 'owner_id', 20),
+       ColumnInfo('User Id', 'user_id', 20),
+       ColumnInfo('Rcpt #', 'receipt_no', 20),
+       ColumnInfo('Book Dt', 'book_date', 20),
+       ColumnInfo('Func Dt', 'function_date', 20),
+       ColumnInfo('Func Name', 'function_name', 20),
+       ColumnInfo('Shift', 'function_shift', 20),
+       ColumnInfo('Party Name', 'party_name', 20),
+       ColumnInfo('Address', 'party_address', 20),
+       ColumnInfo('Contact', 'party_contact', 20),
     ];
 
   }

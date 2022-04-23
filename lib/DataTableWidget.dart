@@ -4,13 +4,12 @@ import 'package:flutter/rendering.dart';
 import 'package:collection/collection.dart';
 import 'SampleData.dart';
 
-class ColumnInfo{
+class ColumnInfo {
   final String lable;
   final String name;
   final int width;
-  final Type type ;
 
-  ColumnInfo(this.lable, this.name,this.width, this.type);
+  ColumnInfo(this.lable, this.name, this.width);
 }
 
 class DataTableWidget extends StatefulWidget {
@@ -19,7 +18,7 @@ class DataTableWidget extends StatefulWidget {
   final List<Map<String, dynamic>> data;
 
   DataTableWidget(
-      this.columnInfos,
+    this.columnInfos,
     this.columns,
     this.data, {
     Key? key,
@@ -36,7 +35,6 @@ class _DataTableWidgetState extends State<DataTableWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Container(
@@ -156,6 +154,17 @@ class _DataTableWidgetState extends State<DataTableWidget> {
                             setState(() {
                               sortColumnIndex = columnIndex;
                               sortAscending = ascending;
+                              widget.data.sort((a, b) {
+                                dynamic avalue = a[widget.columnInfos[sortColumnIndex].name];
+                                dynamic bvalue = b[widget.columnInfos[sortColumnIndex].name];
+                                if(avalue is String){
+                                  avalue = avalue.toString().toLowerCase();
+                                  bvalue = bvalue.toString().toLowerCase();
+                                }
+                                return ((ascending)
+                                    ? avalue.compareTo(bvalue)
+                                    : bvalue.compareTo(avalue));
+                              });
                             });
                             print('>>>> $columnIndex, $ascending');
                           },
