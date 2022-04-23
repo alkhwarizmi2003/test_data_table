@@ -25,22 +25,23 @@ class _DataViewerPageState extends State<DataViewerPage> {
     sd.getTransData();
 
      colInfos = [
-      ColumnInfo('ID', 'trans_id', 20),
-       ColumnInfo('Hall Id', 'hall_id', 20),
-       ColumnInfo('Owner Id', 'owner_id', 20),
-       ColumnInfo('User Id', 'user_id', 20),
-       ColumnInfo('Rcpt #', 'receipt_no', 20),
-       ColumnInfo('Book Dt', 'book_date', 20),
-       ColumnInfo('Func Dt', 'function_date', 20),
-       ColumnInfo('Func Name', 'function_name', 20),
-       ColumnInfo('Shift', 'function_shift', 20),
-       ColumnInfo('Party Name', 'party_name', 20),
-       ColumnInfo('Address', 'party_address', 20),
-       ColumnInfo('Contact', 'party_contact', 20),
+      ColumnInfo('ID', 'trans_id', 40, int),
+       ColumnInfo('Hall Id', 'hall_id', 60, int),
+       ColumnInfo('Owner Id', 'owner_id', 60, int),
+       ColumnInfo('User Id', 'user_id', 60, int),
+       ColumnInfo('Rcpt #', 'receipt_no', 60, int),
+       ColumnInfo('Book Dt', 'book_date', 100, DateTime),
+       ColumnInfo('Func Dt', 'function_date', 100, DateTime),
+       ColumnInfo('Func Name', 'function_name', 100, String),
+       ColumnInfo('Shift', 'function_shift', 60, String),
+       ColumnInfo('Party Name', 'party_name', 100, String),
+       ColumnInfo('Address', 'party_address', 120, String),
+       ColumnInfo('Contact', 'party_contact', 80, String),
     ];
 
   }
 
+  final MaterialStateProperty<Color?> headerBk =   MaterialStateProperty.resolveWith((states) => Colors.blue);
 
   @override
   Widget build(BuildContext context) {
@@ -48,20 +49,7 @@ class _DataViewerPageState extends State<DataViewerPage> {
       appBar: AppBar(
         title: Text('Data Table'),
       ),
-      body: DataTableWidget(colInfos, [
-        'Id',
-        'Hall Id',
-        'Owner Id',
-        'User Id',
-        'Rcpt #',
-        'Book Dt',
-        'Func Dt',
-        'Func Name',
-        'Shift',
-        'Party Name',
-        'Address',
-        'Contact',
-      ], sd.getTransData()),
+      body: DataTableWidget(colInfos, sd.getTransData(), headerBk),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           List<Iterable<TmpObj>> list = sd

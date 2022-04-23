@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,22 +6,23 @@ import 'package:collection/collection.dart';
 import 'SampleData.dart';
 
 class ColumnInfo {
-  final String lable;
+  final String label;
   final String name;
-  final int width;
+  final double? width;
+  final Type type;
 
-  ColumnInfo(this.lable, this.name, this.width);
+  ColumnInfo(this.label, this.name, this.width, this.type);
 }
 
 class DataTableWidget extends StatefulWidget {
   final List<ColumnInfo> columnInfos;
-  final List<String> columns;
   final List<Map<String, dynamic>> data;
+  final MaterialStateProperty<Color?> headerBk;
 
   DataTableWidget(
     this.columnInfos,
-    this.columns,
-    this.data, {
+    this.data,
+    this.headerBk, {
     Key? key,
   }) : super(key: key);
 
@@ -38,149 +40,116 @@ class _DataTableWidgetState extends State<DataTableWidget> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Container(
-        height: 450,
-        decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 3)),
+        // height: 450,
+        // decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 3)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               flex: 0,
-              child: DataTable(
-                columnSpacing: 0,
-                headingRowColor: MaterialStateColor.resolveWith(
-                  (states) {
-                    return Colors.lightGreenAccent;
-                  },
-                ),
-                // decoration: BoxDecoration(color: Colors.purpleAccent),
-                columns: widget.columns
-                    .map(
-                      (e) => DataColumn(
-                        label: Text(e),
+              child: IconTheme(
+                data: IconThemeData(color: Colors.black, opacity: 1,size:0),
+                child: DataTable(
+                    sortAscending: sortAscending,
+                    sortColumnIndex: sortColumnIndex,
+                    columnSpacing: 0,
+                    headingRowHeight: 40,headingRowColor: widget.headerBk,
+                    dataRowHeight: 0,
+                    columns: widget.columnInfos
+                        .map(
+                          (c) => DataColumn(
+                            onSort: (columnIndex, ascending) {
+                              setState(() {
+                                sortColumnIndex = columnIndex;
+                                sortAscending = ascending;
+                                widget.data.sort((a, b) {
+                                  dynamic avalue = a[c.name];
+                                  dynamic bvalue = b[c.name];
+                                  if (avalue is String) {
+                                    avalue = avalue.toString().toLowerCase();
+                                    bvalue = bvalue.toString().toLowerCase();
+                                  }
+                                  return ((ascending) ? avalue.compareTo(bvalue) : bvalue.compareTo(avalue));
+                                });
+                              });
+                              print('>>>> $columnIndex, $ascending');
+                            },
+                            label: Text(c.label), numeric: c.type==int ? true:false,
+                          ),
+                        )
+                        .toList(),
+                    rows: [
+                      DataRow(
+                        cells: widget.data[0].entries.toList().map((map) {
+                          double width = widget.columnInfos.firstWhere((element) => element.name == map.key).width ?? 0;
+                          return DataCell(
+                            Container(
+                              width: width,
+                              child: Text(
+                                map.value.toString(),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
-                    )
-                    .toList(),
-                rows: [
-                  DataRow(cells: [
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        width: 80,
-                        child: Text('ert'),
-                      ),
-                    ),
-                  ]),
-                ],
+                    ]),
               ),
             ),
             Expanded(
               flex: 1,
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: DataTable(
-                  sortAscending: sortAscending,
-                  sortColumnIndex: sortColumnIndex,
-                  columnSpacing: 0,
-                  headingRowHeight: 40,
-                  columns: widget.columns
-                      .map(
-                        (e) => DataColumn(
-                          onSort: (columnIndex, ascending) {
-                            setState(() {
-                              sortColumnIndex = columnIndex;
-                              sortAscending = ascending;
-                              widget.data.sort((a, b) {
-                                dynamic avalue = a[widget.columnInfos[sortColumnIndex].name];
-                                dynamic bvalue = b[widget.columnInfos[sortColumnIndex].name];
-                                if(avalue is String){
-                                  avalue = avalue.toString().toLowerCase();
-                                  bvalue = bvalue.toString().toLowerCase();
-                                }
-                                return ((ascending)
-                                    ? avalue.compareTo(bvalue)
-                                    : bvalue.compareTo(avalue));
-                              });
-                            });
-                            print('>>>> $columnIndex, $ascending');
-                          },
-                          label: Text(e),
-                        ),
-                      )
-                      .toList(),
-                  rows: widget.data
-                      .map(
-                        (m) => DataRow(
-                            cells: m.entries
-                                .toList()
-                                .map((map) => DataCell(Container(width: 80, child: Text(map.value.toString()))))
-                                .toList()),
-                      )
-                      .toList(),
+                child: IconTheme(
+                  data: IconThemeData(color: Colors.purple, opacity: 0,size: 0),
+                  child: DataTable(
+                    sortAscending: sortAscending,
+                    sortColumnIndex: sortColumnIndex,showCheckboxColumn: false,
+                    columnSpacing: 0,
+                    headingRowHeight: 0,
+                    columns: widget.columnInfos
+                        .map(
+                          (c) => DataColumn(
+                            onSort: (columnIndex, ascending) {
+                              // setState(() {
+                              //   sortColumnIndex = columnIndex;
+                              //   sortAscending = ascending;
+                              //   widget.data.sort((a, b) {
+                              //     dynamic avalue = a[c.name];
+                              //     dynamic bvalue = b[c.name];
+                              //     if (avalue is String) {
+                              //       avalue = avalue.toString().toLowerCase();
+                              //       bvalue = bvalue.toString().toLowerCase();
+                              //     }
+                              //     return ((ascending) ? avalue.compareTo(bvalue) : bvalue.compareTo(avalue));
+                              //   });
+                              // });
+                              // print('>>>> $columnIndex, $ascending');
+                            },
+                            label: Text(c.label),numeric: c.type==int ? true:false,
+                          ),
+                        )
+                        .toList(),
+                    rows: widget.data
+                        .map(
+                          (m) => DataRow(onSelectChanged: (changed){},
+                              cells: m.entries.toList().map((map) {
+                            double width =
+                                widget.columnInfos.firstWhere((element) => element.name == map.key).width ?? 0;
+                            Type type = widget.columnInfos.firstWhere((element) => element.name == map.key).type;
+                            return DataCell(
+                              Container(
+                                width: width,
+                                child: Text(
+                                  map.value.toString(),textAlign: type==int ? TextAlign.end:TextAlign.start,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            );
+                          }).toList()),
+                        )
+                        .toList(),
+                  ),
                 ),
               ),
             ),
